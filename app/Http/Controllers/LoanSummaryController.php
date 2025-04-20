@@ -16,14 +16,30 @@ class LoanSummaryController extends Controller
     {
         abort_unless(Gate::allows('loan_access'), 403);
 
-        $dateRange = '';
-        if ($request->date) {
-            $dateRange = $request->input('date', Carbon::now()->format('m/d/Y') . ' - ' . Carbon::now()->format('m/d/Y'));
-
-            // Extract start and end dates from the range
-            $dates = explode(' - ', $dateRange);
-            $startDate = Carbon::createFromFormat('M j, Y', trim($dates[0]))->format('m/d/Y');
-            $endDate = Carbon::createFromFormat('M j, Y', trim($dates[1]))->format('m/d/Y');
+        $dateRange = $request->input('date');
+        
+        if ($dateRange) {
+            try {
+                // Extract start and end dates from the range
+                $dates = explode(' - ', $dateRange);
+                
+                // Trim whitespace and parse dates
+                $startDate = trim($dates[0]);
+                $endDate = trim($dates[1]);
+                
+                // Convert to database format
+                $startDate = Carbon::parse($startDate)->format('Y-m-d');
+                $endDate = Carbon::parse($endDate)->format('Y-m-d');
+                
+                $loans = Loan::with(['customer', 'details'])
+                    ->whereBetween('date_of_loan', [
+                        $startDate,
+                        $endDate
+                    ])
+                    ->paginate(20);
+            } catch (\Exception $e) {
+                return back()->with('error', 'Invalid date format. Please use format: Month DD, YYYY - Month DD, YYYY');
+            }
             
             $loans = Loan::with(['customer', 'details'])
                 ->whereBetween('date_of_loan', [
