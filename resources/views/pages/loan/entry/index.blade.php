@@ -746,7 +746,7 @@
     });
 </script> --}}
 <script>
-    document.getElementById('loan_type').addEventListener('change', () => {
+    document.getElementById('date_of_loan').addEventListener('change', () => {
         const loanType = document.getElementById('loan_type').value;
 
         // Unbind existing event listeners (optional for clarity)
@@ -756,15 +756,16 @@
             const newElement = element.cloneNode(true);
             element.parentNode.replaceChild(newElement, element);
         });
+        console.log('{{ auth()->user()->branch->type }}');
 
         // Attach the appropriate listeners based on loan type
-        if (loanType === 'monthly') {
+        if ('{{ auth()->user()->branch->type }}' === 'Monthly') {
             document.getElementById('months_to_pay').addEventListener('input', calculatePayments);
             document.getElementById('principal_amount').addEventListener('input', calculatePayments);
             document.getElementById('interest').addEventListener('input', calculatePayments);
             document.getElementById('svc_charge').addEventListener('input', calculatePayments);
             calculatePayments();
-        } else if (loanType === 'daily') {
+        } else if ('{{ auth()->user()->branch->type }}' === 'Daily') {
             document.getElementById('days_to_pay').addEventListener('input', calculatePaymentsDaily);
             document.getElementById('principal_amount').addEventListener('input', calculatePaymentsDaily);
             document.getElementById('interest').addEventListener('input', calculatePaymentsDaily);

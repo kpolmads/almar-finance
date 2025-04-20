@@ -262,9 +262,7 @@ class BMController extends Controller
             }
         }
 
-        $comps = Cache::remember('branch_comps_' . $branch, now()->addHours(1), function () use ($branch, $request) {
-            return ComputeCashOnHand::where('branch_id', $branch)->where('id', $request->coh_id)->first();
-        });
+        $comps = ComputeCashOnHand::where('branch_id', $branch)->paginate(10);
 
         // Cache loan and collection metrics
         $metrics = Cache::remember('branch_metrics_' . $branch, now()->addHours(1), function () use ($branch) {
