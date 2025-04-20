@@ -26,7 +26,8 @@ class LoanSummaryController extends Controller
                 // Trim whitespace and parse dates
                 $startDate = trim($dates[0]);
                 $endDate = trim($dates[1]);
-                
+                var_dump($startDate);
+                var_dump($endDate);
                 // Convert to database format using specific format
                 $startDate = Carbon::createFromFormat('M j, Y', $startDate)->format('Y-m-d');
                 $endDate = Carbon::createFromFormat('M j, Y', $endDate)->format('Y-m-d');
