@@ -40,13 +40,6 @@ class LoanSummaryController extends Controller
             } catch (\Exception $e) {
                 return back()->with('error', 'Invalid date format. Please use format: Month DD, YYYY - Month DD, YYYY');
             }
-            
-            $loans = Loan::with(['customer', 'details'])
-                ->whereBetween('date_of_loan', [
-                    $startDate,
-                    $endDate
-                ])
-                ->paginate(20);
         } else {
             $loans = Loan::with(['customer', 'details'])
                 ->paginate(20);
