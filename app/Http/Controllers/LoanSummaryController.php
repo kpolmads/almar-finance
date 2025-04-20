@@ -27,9 +27,9 @@ class LoanSummaryController extends Controller
                 $startDate = trim($dates[0]);
                 $endDate = trim($dates[1]);
                 
-                // Convert to database format
-                $startDate = Carbon::parse($startDate)->format('Y-m-d');
-                $endDate = Carbon::parse($endDate)->format('Y-m-d');
+                // Convert to database format using specific format
+                $startDate = Carbon::createFromFormat('M j, Y', $startDate)->format('Y-m-d');
+                $endDate = Carbon::createFromFormat('M j, Y', $endDate)->format('Y-m-d');
                 
                 $loans = Loan::with(['customer', 'details'])
                     ->whereBetween('date_of_loan', [
