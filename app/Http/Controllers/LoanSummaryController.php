@@ -33,6 +33,7 @@ class LoanSummaryController extends Controller
                 ->paginate(20);
         } else {
             $loans = Loan::with(['customer', 'details'])
+            ->whereNotNull('status')
                 ->paginate(20);
         }
 
