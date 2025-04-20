@@ -80,6 +80,22 @@ class CustomerController extends Controller
     {
         abort_unless(Gate::allows('loan_access') || Gate::allows('branch_access'), 404);
         $branch = auth()->user()->branch_id;
+        $request->validate([
+            'type' => 'required',
+            'first_name' => 'required',
+            'middle_name' => 'required',
+            'last_name' => 'required',
+            'house' => 'required',
+            'street' => 'required',
+            'barangay' => 'required',
+            'city' => 'required',
+            'birth_date' => 'required',
+            'birth_place' => 'required',
+            'age' => 'required',
+            'gender' => 'required',
+            'citizenship' => 'required',
+            'facebook_name' => 'required',
+        ]);
         // if ($request->validated()) {
         $customer = new Customer();
         $customer->type = $request->type;
