@@ -98,7 +98,7 @@ class LeaveController extends Controller
 
     public function approve(Request $request, Leave $leave)
     {
-        abort_unless(Gate::allows('hr_access') || Gate::allows('admin_access'), 403);
+        abort_unless(Gate::allows('hr_access') || Gate::allows('admin_access') || Gate::allows('super_access'), 403);
 
         $validated = $request->validate([
             'remarks' => 'nullable|string|max:255'
@@ -134,7 +134,7 @@ class LeaveController extends Controller
 
     public function reject(Request $request, Leave $leave)
     {
-        abort_unless(Gate::allows('hr_access') || Gate::allows('admin_access'), 403);
+        abort_unless(Gate::allows('hr_access') || Gate::allows('admin_access') || Gate::allows('super_access'), 403);
 
         $validated = $request->validate([
             'remarks' => 'required|string|max:255'
@@ -163,7 +163,7 @@ class LeaveController extends Controller
 
     public function employeeLeaves(User $employee)
     {
-        abort_unless(Gate::allows('hr_access') || Gate::allows('admin_access'), 403);
+        abort_unless(Gate::allows('hr_access') || Gate::allows('admin_access') || Gate::allows('super_access'), 403);
 
         $leaves = Leave::where('employee_id', $employee->id)
             ->orderBy('start_date', 'desc')
